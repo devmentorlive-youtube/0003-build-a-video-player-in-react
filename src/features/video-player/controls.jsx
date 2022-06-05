@@ -1,4 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useContext } from "react";
+
+import { VideoPlayerContext } from "./context";
+import Slider from "@/ui/slider";
 
 import {
   PlayIcon,
@@ -7,54 +10,16 @@ import {
   VolumeUpIcon,
 } from "@heroicons/react/solid";
 
-import PlayHead from "./play-head";
-
-export default function VideoPlayerControls({
-  volume = 100,
-  playing = false,
-  setVolume,
-  setPlaying,
-  currentTime,
-  duration,
-  onSeek = () => {},
-}) {
-  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-
-  const slider = useRef(undefined);
-  const dot = useRef(undefined);
-
-  useEffect(() => {
-    if (!dot.current || !slider.current) return;
-
-    dot.current.addEventListener("pointerdown", handlePointerDown);
-    slider.current.addEventListener("pointerdown", handlePointerDown);
-
-    return () =>
-      dot.current?.removeEventListener("pointerdown", handlePointerDown);
-  }, [dot, slider, showVolumeSlider]);
-
-  function handlePointerDown(e) {
-    window.addEventListener("pointerup", handlePointerUp);
-    window.addEventListener("pointermove", handlePointerMove);
-  }
-
-  function handlePointerUp(e) {
-    window.removeEventListener("pointerup", handlePointerUp);
-    window.removeEventListener("pointermove", handlePointerMove);
-    setShowVolumeSlider(false);
-  }
-
-  function handlePointerMove(e) {
-    const { max, min } = Math;
-    const { height, bottom } = slider.current.getBoundingClientRect();
-
-    const volume = max(0, min(100, ((e.screenY - bottom) / height) * 100));
-
-    setVolume(volume);
-  }
-
-  function onChange(e) {}
-
+export default function VideoPlayerControls({ duration, onSeek = () => {} }) {
+  const {
+    playing,
+    setPlaying,
+    volume,
+    setVolume,
+    showVolumeSlider,
+    setShowVolumeSlider,
+    currentTime,
+  } = useContext(VideoPlayerContext);
   return (
     <div className="flex items-center h-full">
       <div className="flex items-center justify-center h-full gap-3 px-3">
@@ -70,27 +35,54 @@ export default function VideoPlayerControls({
           />
         )}
         <div className="relative">
-          <VolumeUpIcon
-            className="text-gray-500 w-[24px] h-[24px]"
-            onClick={() => setShowVolumeSlider(true)}
-          />
+          {volume < 1 ? (
+            <VolumeOffIcon
+              className="text-gray-500 w-[24px] h-[24px]"
+              onClick={() => {
+                setVolume(0);
+                setShowVolumeSlider((prev) => !prev);
+              }}
+            />
+          ) : (
+            <VolumeUpIcon
+              className="text-gray-500 w-[24px] h-[24px]"
+              onClick={() => {
+                setVolume(100);
+                setShowVolumeSlider((prev) => !prev);
+              }}
+            />
+          )}
 
           {showVolumeSlider && (
-            <div
-              className="absolute bottom-10 h-32 w-3 bg-gray-600 rounded z-40"
-              ref={slider}>
-              <div
-                className={`border bottom-0 -translate-x-[4px] -translate-y-[50%] rounded-full absolute bg-gray-500 w-[20px] h-[20px] cursor-pointer`}
-                style={{ top: `${volume}%` }}
-                ref={dot}
+            <div className="ml-1">
+              <Slider
+                vertical
+                {...{
+                  value: volume,
+                  onChange: setVolume,
+                  barClassName: "bg-gray-600 w-full",
+                  dotClassName:
+                    "bg-gray-500 w-[20px] h-[20px] rounded-full translate-y-[50%]",
+                  sliderClassName:
+                    "w-[20px] bg-gray-800 bottom-10 h-24  rounded",
+                }}
               />
             </div>
           )}
         </div>
       </div>
 
-      <div className="w-full relative h-full px-4">
-        <PlayHead {...{ onChange: onSeek, currentTime, duration }} />
+      <div className="w-full relative h-[32px] mx-8 flex justify-center bg-gray-800 ">
+        <Slider
+          value={(currentTime / duration) * 100}
+          onChange={onSeek}
+          {...{
+            barClassName: "rounded bg-red-600 h-full",
+            dotClassName:
+              "rounded bg-red-500 w-[32px] h-[32px] rounded-full -translate-x-[50%] ",
+            sliderClassName: "top-0 bottom-10 h-[32px] w-full ",
+          }}
+        />
       </div>
     </div>
   );

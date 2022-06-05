@@ -1,13 +1,21 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useContext } from "react";
 import useInterval from "@use-it/interval";
+
+import { VideoPlayerProvider, VideoPlayerContext } from "./context";
 
 import Controls from "./controls";
 
 export default function VideoPlayer({ src }) {
-  const [playing, setPlaying] = useState(false);
-  const [volume, setVolume] = useState(100);
-  const [currentTime, setCurrentTime] = useState(0);
+  return (
+    <VideoPlayerProvider>
+      <VideoPlayerConsumer {...{ src }} />
+    </VideoPlayerProvider>
+  );
+}
 
+function VideoPlayerConsumer({ src }) {
+  const { setCurrentTime, setPlaying, playing, volume } =
+    useContext(VideoPlayerContext);
   const ref = useRef(undefined);
 
   useEffect(() => {
@@ -29,6 +37,7 @@ export default function VideoPlayer({ src }) {
   }, [playing]);
 
   useEffect(() => {
+    console.dir(volume * 0.01);
     ref.current.volume = volume * 0.01;
   }, [volume]);
 
@@ -37,17 +46,12 @@ export default function VideoPlayer({ src }) {
   }
 
   return (
-    <div className="w-screen h-screen bg-black">
-      <video src={src} className="w-screen h-screen" ref={ref} />
+    <div className="relative w-screen sm:h-screen h-[300px] bg-black overflow-hidden">
+      <video src={src} className="w-full h-full" ref={ref} />
 
       <div className="w-screen border border-gray-800 bg-gray-900 absolute bottom-0 h-[50px]">
         <Controls
           {...{
-            volume,
-            playing,
-            setPlaying,
-            setVolume,
-            currentTime,
             duration: ref.current?.duration || 0,
             onSeek: (percent) =>
               (ref.current.currentTime = ref.current.duration * percent * 0.01),

@@ -1,46 +1,27 @@
-# DevmentorLive NextJS Starter Template
+# Build a Video Player in ReactJS
 
-## Getting Started
+## DevmentorLive #0003
 
-To create an app using this starter
+So......
 
-```bash
-npx create-next-app your-app-name -e https://github.com/devmentorlive-youtube/next-tailwind-starter
-```
+Your boss comes to you and they say, "Yeah.... it would be great if you could make us a video player. It should take a video url and it should fill the full width in mobile profile and landscape and also on Desktop. It will need to have a play/pause button, a volume control, a mute button, and a slider for the seek timeline. The viewer should be able to drag it and click anywhere to skip to that part."
 
-## This template uses [TailwindCSS](https://tailwindcss.com/)!
+And you say, "This is React, that's easy!"
 
-## To run your server (development)
+## What you will learn from building this project
 
-```
-cd your-app-name
-npm run dev
-```
+- How to bootstrap your next React project using NextJS
+- How to interract with imperative APIs like <media> in React
+- How to use Pointer events for mobile and desktop interaction
+- How to use useEffect to manage state changes
+- How to implement a feature with a context and provider
+- How to create a Slider UI control
+- React, TailwindCSS, NextJS, and programming best practices and general knowledge
 
-## Folder structure
+## See this in action!
 
-```bash
-src
-├── features
-├── pages
-│   └── index.jsx
-├── ui
-└── index.jsx
-```
+https://vercel.com/devmentor-youtube/0003-build-a-video-player-in-react
 
-This app uses a modified/simplified version of [Atomic Design](https://bradfrost.com/blog/post/atomic-web-design/), better suited for modern web development.
+## Watch the video tutorial on youtube
 
-
-### /ui
-
-This folder is for your "lego blocks", single purpose React components that can be combined together to make more complicated components, known as Features
-
-
-### /features
-
-This folder is for more complex components, or features. Features are created by composing many UI components and usually, state
-
-
-### /pages
-
-This folder is for navigable components. A router automagically creates urls for anything in this folder. To create a page, combine features and ui components and put them in a component in this page. Typically state is managed in the feature, and any props that come from the server are passed through pages via the return object from getServerSideProps. Those props are then passed down into features as props, or put into a context.
+https://www.youtube.com/watch?v=TODO
