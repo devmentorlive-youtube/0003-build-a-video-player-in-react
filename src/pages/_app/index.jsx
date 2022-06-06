@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }) {
       videoId="rYlwiJ0vr_4"
       title="Build an HTML5 Media Player using Modern React"
       description="In this lesson I teach you how to to build a responsive media player using react, nextjs, tailwind, and good programming habits!">
-      <Component {...pageProps} />{" "}
+      <Component {...pageProps} />
     </Page>
   );
 }

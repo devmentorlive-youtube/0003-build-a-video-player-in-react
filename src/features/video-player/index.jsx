@@ -46,7 +46,7 @@ function VideoPlayerConsumer({ src }) {
   }
 
   return (
-    <div className="relative w-screen sm:h-screen h-[300px] bg-black overflow-hidden">
+    <div className="relative w-screen sm:h-screen h-[300px] bg-black overflow-hidden z-30">
       <video src={src} className="w-full h-full" ref={ref} />
 
       <div className="w-screen border border-gray-800 bg-gray-900 absolute bottom-0 h-[50px]">
